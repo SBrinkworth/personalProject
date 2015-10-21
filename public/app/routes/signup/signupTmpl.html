@@ -1,0 +1,15 @@
+<form class="signupBox" ng-submit="signup()">
+  <h3>Sign Up</h3>
+  <h4>Already a user?
+    <a href="#/login">Login</a>
+  </h4>
+  First Name<input type="text" model="user.name_first" placeholder="First Name" required/>
+  Last Name<input type="text" model="user.name_last" placeholder="Last Name" required/>
+  E-mail<input type="email" model="user.email" placeholder="Email" required/>
+  Alternate E-mail<input type="email" model="user.email_alt" placeholder="Alt E-mail">
+  Password<input type="password" model="user.password" placeholder="Password" required/>
+  Repeat Password<input type="password" model="password_repeat" placeholder="Password" required/>
+  Office Phone<input type="tel" model="user.phone_office" placeholder="Office Phone" required/>
+  Mobile Phone<input type="tel" model="user.phone_mobile" placeholder="Mobile Phone">
+  <button type="submit" name="signup">Sign Up</button>
+</form>

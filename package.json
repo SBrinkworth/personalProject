@@ -1,0 +1,35 @@
+{
+  "name": "personal_project",
+  "version": "1.0.0",
+  "description": "My DevMountain Personal Project",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SBrinkworth/personalProject.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SBrinkworth/personalProject/issues"
+  },
+  "homepage": "https://github.com/SBrinkworth/personalProject#readme",
+  "dependencies": {
+    "bcrypt-nodejs": "latest",
+    "body-parser": "^1.14.1",
+    "connect-flash": "~0.1.1",
+    "cookie-parser": "~1.0.0",
+    "cors": "^2.7.1",
+    "ejs": "~0.8.5",
+    "express": "^4.13.3",
+    "express-session": "^1.11.3",
+    "method-override": "~1.0.0",
+    "mongoose": "^4.1.12",
+    "morgan": "~1.0.0",
+    "passport": "^0.3.0",
+    "passport-local": "^1.0.0"
+  }
+}

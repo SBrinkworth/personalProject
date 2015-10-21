@@ -1,0 +1,56 @@
+<div class="items">
+  <div class="my-flex min" ng-click="hide=!hide">
+    <div class="display">Name: {{location.name}}</div>
+    <div class="display">Short: {{location.nameShort}}</div>
+    <div class="display" style="flex: 3">address: {{location.address.lineOne}} {{location.address.lineTwo}}, {{location.address.city}} {{location.address.state}} {{location.address.zip}} {{location.address.country}}</div>
+  </div>
+
+  <div class="hidden-info" ng-if="hide">
+    <div class="my-flex">
+      <div class="display" ng-if="!inputs">Description: {{location.description}}</div>
+    </div>
+
+    <div class="edit" ng-if="inputs">
+      Name:
+      <input type="text" placeholder="Location Name" ng-model="tempLocation.name">
+    </div>
+    <div class="edit" ng-if="inputs">
+      Short:
+      <input type="text" placeholder="Location Name Short" ng-model="tempLocation.nameShort">
+    </div>
+    <br>
+    <div ng-if="inputs">
+      Address:
+    </div>
+    <br>
+    <div class="edit" ng-if="inputs">Line 1:
+      <input type="text" placeholder="Address Line 1" ng-model="tempLocation.address.lineOne">
+    </div>
+    <div class="edit" ng-if="inputs">Line 2:
+      <input type="text" placeholder="Address Line 2" ng-model="tempLocation.address.lineTwo">
+    </div>
+    <div class="edit" ng-if="inputs">City:
+      <input type="text" placeholder="City" ng-model="tempLocation.address.city">
+    </div>
+    <div class="edit" ng-if="inputs">State:
+      <input type="text" placeholder="State" ng-model="tempLocation.address.state">
+    </div>
+    <div class="edit" ng-if="inputs">Zip:
+      <input type="text" placeholder="Zip" ng-model="tempLocation.address.zip">
+    </div>
+    <div class="edit" ng-if="inputs">Country:
+      <input type="text" placeholder="Country" ng-model="tempLocation.address.country">
+    </div>
+    <br>
+    <div class="edit" ng-if="inputs">
+      Description:
+      <textarea ng-model="tempLocation.description" placeholder="Description"></textarea>
+    </div>
+
+    <br>
+    <button type="button" ng-click="toggleInputs()" ng-if="!inputs">Edit</button>
+    <button type="button" ng-click="editLocation()" ng-if="inputs">Save</button>
+    <button type="button" ng-click="toggleInputs()" ng-if="inputs">cancel</button>
+    <button type="button" ng-click="deleteLocation()" ng-if="!inputs">Delete</button>
+  </div>
+</div>

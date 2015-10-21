@@ -1,0 +1,23 @@
+<div class="items">
+  <div class="my-flex min" ng-click="hide=!hide">
+    <div class="display">Case: {{case.name}}</div>
+    <div class="display">Drive: {{case.drive.name}}</div>
+    <div class="display">Location: {{case.location.name}}</div>
+  </div>
+  <div class="hidden-info" ng-if="hide">
+    <div class="edit" ng-if="inputs">Name:
+      <input type="text" placeholder="Case Name" ng-model="tempCase.name">
+    </div>
+    <div class="edit" ng-if="inputs">Drive:
+      <select ng-model="tempCase.drive" ng-options="drive._id as drive.name for drive in tempDrives"></select>
+    </div>
+    <div class="edit" ng-if="inputs">Location:
+      <select ng-model="tempCase.location" ng-options="location._id as location.name for location in tempLocations"></select>
+    </div>
+    <br>
+    <button type="button" ng-click="toggleInputs()" ng-if="!inputs">Edit</button>
+    <button type="button" ng-click="editCase()" ng-if="inputs">Save</button>
+    <button type="button" ng-click="toggleInputs()" ng-if="inputs">cancel</button>
+    <button type="button" ng-click="deleteCase()" ng-if="!inputs">Delete</button>
+  </div>
+</div>

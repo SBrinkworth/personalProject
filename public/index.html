@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="sanityWorksApp">
+
+<head>
+  <title>SanITyWorks.com</title>
+  <link rel="shortcut icon" href="icons/ITLogo.png">
+  <link rel="stylesheet" href="styles/normalize.css">
+  <link rel="stylesheet" href="styles/style.css">
+  <meta name="viewport" content="initial-scale=1" />
+</head>
+
+<header class="navigation" role="banner">
+  <div class="navigation-wrapper">
+    <a href="#/home" class="logo">
+      San<span>IT</span>yWorks.com
+    </a>
+    <a href="javascript:void(0)" class="navigation-menu-button" id="js-mobile-menu">MENU</a>
+    <nav role="navigation">
+      <ul id="js-navigation-menu" class="navigation-menu show">
+        <li class="nav-link"><a href="#/home">Home</a></li>
+        <li class="nav-link" ng-if="logedin"><a href="#/dashboard">Dashboard</a></li>
+        <li class="nav-link" ng-if="logedin"><a href="#/settings">Settings</a></li>
+        <li class="nav-link" ng-if="!logedin"><a href="#/login">Login</a></li>
+        <li class="nav-link" ng-if="logedin"><a href="#/login">Logout</a></li>
+      </ul>
+    </nav>
+</header>
+
+<body layout="column" ng-controller="mainCtrl" ng-cloak>
+  </div>
+
+  <div ng-view></div>
+
+  <footer class="footer" role="contentinfo">
+    <div class="footer-logo">
+      <img src="https://raw.githubusercontent.com/thoughtbot/refills/master/source/images/placeholder_logo_1.png" alt="Logo image">
+    </div>
+    <div class="footer-links">
+      <ul>
+        <li>
+          <h3>Content</h3>
+        </li>
+        <li><a href="#/home">Home</a></li>
+        <li ng-if="logedin"><a href="#/dashboard">Dashboard</a></li>
+        <li ng-if="logedin"><a href="#/settings">Settings</a></li>
+        <li ng-if="!logedin"><a href="#/login">Login</a></li>
+        <li ng-if="logedin"><a href="#/login">Logout</a></li>
+      </ul>
+      <ul>
+        <li>
+          <h3>Follow Us</h3>
+        </li>
+        <li><a href="">Facebook</a></li>
+        <li><a href="">Twitter</a></li>
+      </ul>
+      <ul>
+        <li>
+          <h3>Legal</h3>
+        </li>
+        <li><a href="">Terms and Conditions</a></li>
+        <li><a href="">Privacy Policy</a></li>
+      </ul>
+    </div>
+
+    <hr>
+
+    <p>Disclaimer area lorem ipsum dolor sit amet, consectetur adipisicing elit. Rerum, nostrum repudiandae saepe.</p>
+  </footer>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-route.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="js/jquery.js"></script>
+  <script src="app/app.js"></script>
+  <script src="app/controllers/mainCtrl.js"></script>
+  <script src="app/services/mainService.js"></script>
+  <script src="app/services/dashService.js"></script>
+  <script src="app/routes/home/homeCtrl.js"></script>
+  <script src="app/routes/login/loginCtrl.js"></script>
+  <script src="app/routes/dashboard/dashCtrl.js"></script>
+  <script src="app/routes/settings/settingsCtrl.js"></script>
+  <script src="app/routes/signup/signupCtrl.js"></script>
+  <script src="app/directives/drives/drivesDir.js"></script>
+  <script src="app/directives/locations/locationsDir.js"></script>
+  <script src="app/directives/cases/casesDir.js"></script>
+</body>
+</html>

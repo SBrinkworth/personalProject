@@ -1,0 +1,213 @@
+<div class="dashboard">
+  <!-- Dashboard Tabs -->
+  <div class="tab" id="tabOne" ng-class="{'active': tabOneActive}" ng-click="dashShow()">
+    <p>
+      Dashboard
+    </p>
+  </div>
+  <div class="tab" id="tabTwo" ng-class="{'active': tabTwoActive}" ng-click="drivesShow()">
+    <p>
+      Drives
+    </p>
+  </div>
+  <div class="tab" id="tabThree" ng-class="{'active': tabThreeActive}" ng-click="casesShow()">
+    <p>
+      Cases
+    </p>
+  </div>
+  <div class="tab" id="tabFour" ng-class="{'active': tabFourActive}" ng-click="locationShow()">
+    <p>
+      Locations
+    </p>
+  </div>
+
+  <!-- Dash Windows -->
+  <div class="dash-content">
+
+    <!-- Dashboard Window -->
+    <div class="dash" ng-if="showDash">
+      Dash
+    </div>
+
+    <!-- Drives Window -->
+    <div class="drives" ng-if="showDrives">
+
+      <!-- Drives Add Button and Search Box -->
+      <button type="button" ng-click="toggleDialog()">Add Drive</button>
+      <input class="search" type="search" ng-model="driveSearch" placeholder="Search Drives">
+
+      <!-- Add Drive Form -->
+      <form class="dialog" ng-if="dialog" ng-submit="addDrive(newDrive)">
+        <h3>New Drive</h3>
+        <br>
+        <div class="errors">
+          <p ng-if="nameError">
+            Drive name must be unique
+          </p>
+          <p ng-if="serialNumberError">
+            Drive serial number must be unique
+          </p>
+        </div>
+        <div class="edit">Name:
+          <input type="text" placeholder="Drive Name" ng-model="newDrive.name" required="true">
+        </div>
+
+        <div class="edit">Size:
+          <select ng-model="newDrive.size" required>
+            <option value="">Please select</option>
+            <option value="320 GB">320 GB</option>
+            <option value="500 GB">500 GB</option>
+            <option value="750 GB">750 GB</option>
+            <option value="1 TB">1 TB</option>
+            <option value="2 TB">2 TB</option>
+            <option value="3 TB">3 TB</option>
+            <option value="4 TB">4 TB</option>
+            <option value="5 TB">5 TB</option>
+            <option value="6 TB">6 TB</option>
+          </select>
+        </div>
+
+        <div class="edit">SN:
+          <input type="text" placeholder="Serial Number" ng-model="newDrive.serial_number" required="true">
+        </div>
+
+        <div class="edit">Purchased:
+          <input type="date" ng-model="newDrive.purchase_date">
+        </div>
+
+        <div class="edit">Current Location:
+          <select ng-model="newDrive.location" ng-options="location._id as location.name for location in locations">
+          </select>
+        </div>
+
+        <div class="edit">Case:
+          <select ng-model="newDrive.case" ng-options="case._id as case.name for case in cases">
+          </select>
+        </div>
+
+        <div class="edit">Type:
+          <select ng-model="newDrive.backup_type" required>
+            <option value="">Please select</option>
+            <option value="Weekly">Weekly</option>
+            <option value="Monthly">Monthly</option>
+            <option value="Yearly">Yearly</option>
+          </select>
+        </div>
+
+        <div class="edit">Last Backup:
+          <input type="date" ng-model="newDrive.last_backup_date">
+        </div>
+        <br>
+        <button type="button" ng-click="toggleDialog()">Cancel</button>
+        <button type="submit">Add</button>
+      </form>
+
+      <!-- List of Drives -->
+      <div ng-repeat="drive in drives | filter: driveSearch | filter: filterDrives">
+        <drives-dir drive="drive" locations="locations" cases="cases" edit="editDrive(id, drive)" delete="deleteDrive(id)">
+        </drives-dir>
+      </div>
+    </div>
+
+    <!-- Cases Window -->
+    <div class="cases" ng-if="showCases">
+
+      <!-- Cases Add Button and Search Box -->
+      <button type="button" ng-click="toggleDialog()">Add Case</button>
+      <input class="search" type="text" ng-model="caseSearch" placeholder="Search Cases">
+
+      <!-- Add Case Form -->
+      <form class="dialog" ng-if="dialog" ng-submit="addCase(newCase)">
+        <h3>New Case</h3>
+        <br>
+        <div class="errors">
+          <p ng-if="nameError">
+            Case name must be unique
+          </p>
+        </div>
+        <div class="edit">Name:
+          <input type="text" placeholder="Case Name" ng-model="newCase.name" required="true">
+        </div>
+        <div class="edit">Drive:
+          <select ng-model="newCase.drive" ng-options="drive._id as drive.name for drive in drives">
+          </select>
+        </div>
+        <div class="edit">Location:
+          <select ng-model="newCase.location" ng-options="location._id as location.name for location in locations">
+          </select>
+        </div>
+        <br>
+        <button type="button" ng-click="toggleDialog()">Cancel</button>
+        <button type="submit">Add</button>
+      </form>
+
+      <!-- List of Cases -->
+      <div ng-repeat="case in cases | filter: caseSearch | filter: filterCases">
+        <cases-dir case="case" locations="locations" drives="drives" edit="editCase(id, case)" delete="deleteCase(id)">
+        </cases-dir>
+      </div>
+    </div>
+
+    <!-- Locations Window -->
+    <div class="locations" ng-if="showLocations">
+
+      <!-- Locations Add Button and Search Box -->
+      <button type="button" ng-click="toggleDialog()">Add Location</button>
+      <input class="search" type="search" ng-model="locationSearch" placeholder="Search Locations">
+
+      <!-- Add Location Form -->
+      <form class="dialog" ng-if="dialog" ng-submit="addLocation(newLocation)">
+        <h3>New Location</h3>
+        <br>
+
+        <div class="edit">
+          Name:
+          <input type="text" placeholder="Location Name" ng-model="newLocation.name" required="true">
+        </div>
+        <div class="edit">
+          Short:
+          <input type="text" placeholder="Location Name Short" ng-model="newLocation.nameShort" required="true">
+        </div>
+        <br>
+        <div>
+          Address:
+          <br>
+          <span class="subText">* required</span>
+        </div>
+        <br>
+        <div class="edit">* Line 1:
+          <input type="text" placeholder="Address Line 1" ng-model="newLocation.address.lineOne" required="true">
+        </div>
+        <div class="edit">Line 2:
+          <input type="text" placeholder="Address Line 2" ng-model="newLocation.address.lineTwo">
+        </div>
+        <div class="edit">* City:
+          <input type="text" placeholder="City" ng-model="newLocation.address.city" required="true">
+        </div>
+        <div class="edit">* State:
+          <input type="text" placeholder="State" ng-model="newLocation.address.state" required="true">
+        </div>
+        <div class="edit">* Zip:
+          <input type="text" placeholder="Zip" ng-model="newLocation.address.zip" required="true">
+        </div>
+        <div class="edit">* Country:
+          <input type="text" placeholder="Country" ng-model="newLocation.address.country" required="true">
+        </div>
+        <br>
+        <div class="edit">
+          Description:
+          <textarea ng-model="newLocation.description" placeholder="Description" required="true"></textarea>
+        </div>
+        <br>
+        <button type="button" ng-click="toggleDialog()">Cancel</button>
+        <button type="submit">Add</button>
+      </form>
+
+      <!-- List of Locations -->
+      <div ng-repeat="location in locations | filter: locationSearch | filter: filterLocations">
+        <locations-dir location="location" edit="editLocation(id, location)" delete="deleteLocation(id)">
+        </locations-dir>
+      </div>
+    </div>
+  </div>
+</div>
