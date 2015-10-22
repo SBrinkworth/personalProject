@@ -21,7 +21,7 @@ angular.module('sanityWorksApp').directive('locationsDir', function() {
         var tOF = confirm("Are you sure you want to delete this location?");
         if (tOF) {
           $scope.delete({
-            id: $scope.location._id
+            id: $scope.location._id,
           });
         }
       };

@@ -40,7 +40,8 @@ angular.module('sanityWorksApp').directive('casesDir', function() {
         var tOF = confirm("Are you sure you want to delete this case?");
         if (tOF) {
           $scope.delete({
-            id: $scope.case._id
+            id: $scope.case._id,
+            drive: $scope.case.drive._id
           });
         }
       };

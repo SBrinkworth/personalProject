@@ -50,7 +50,8 @@ angular.module('sanityWorksApp').directive('drivesDir', function() {
         var tOF = confirm("Are you sure you want to delete this drive?");
         if (tOF) {
           $scope.delete({
-            id: $scope.drive._id
+            id: $scope.drive._id,
+            _case: $scope.drive.case._id
           });
         }
       };
@@ -73,7 +74,7 @@ angular.module('sanityWorksApp').directive('drivesDir', function() {
           size: $scope.drive.size,
           serial_number: $scope.drive.serial_number,
           purchase_date: new Date($scope.drive.purchase_date),
-          location: $scope.drive.location._id,
+          location: $scope.drive.location,
           case: $scope.drive.case._id,
           backup_type: $scope.drive.backup_type,
           last_backup_dateackup: new Date($scope.drive.last_backup_date)

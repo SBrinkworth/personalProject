@@ -25,12 +25,12 @@
   <div class="dash-content">
 
     <!-- Dashboard Window -->
-    <div class="dash" ng-if="showDash">
+    <div class="dash" ng-if="tabOneActive">
       Dash
     </div>
 
     <!-- Drives Window -->
-    <div class="drives" ng-if="showDrives">
+    <div class="drives" ng-if="tabTwoActive">
 
       <!-- Drives Add Button and Search Box -->
       <button type="button" ng-click="toggleDialog()">Add Drive</button>
@@ -49,7 +49,7 @@
           </p>
         </div>
         <div class="edit">Name:
-          <input type="text" placeholder="Drive Name" ng-model="newDrive.name" required="true">
+          <input type="text" placeholder="Drive Name" ng-model="newDrive.name" required="true" ng-change="checkName(newDrive.name, 'drive name')">
         </div>
 
         <div class="edit">Size:
@@ -81,7 +81,7 @@
         </div>
 
         <div class="edit">Case:
-          <select ng-model="newDrive.case" ng-options="case._id as case.name for case in cases">
+          <select ng-model="newDrive.case" ng-options="case._id as case.name for case in cases" ng-change="caseSelect(newDrive.case)">
           </select>
         </div>
 
@@ -104,13 +104,13 @@
 
       <!-- List of Drives -->
       <div ng-repeat="drive in drives | filter: driveSearch | filter: filterDrives">
-        <drives-dir drive="drive" locations="locations" cases="cases" edit="editDrive(id, drive)" delete="deleteDrive(id)">
+        <drives-dir drive="drive" locations="locations" cases="cases" edit="editDrive(id, drive)" delete="deleteDrive(id, _case)">
         </drives-dir>
       </div>
     </div>
 
     <!-- Cases Window -->
-    <div class="cases" ng-if="showCases">
+    <div class="cases" ng-if="tabThreeActive">
 
       <!-- Cases Add Button and Search Box -->
       <button type="button" ng-click="toggleDialog()">Add Case</button>
@@ -143,13 +143,13 @@
 
       <!-- List of Cases -->
       <div ng-repeat="case in cases | filter: caseSearch | filter: filterCases">
-        <cases-dir case="case" locations="locations" drives="drives" edit="editCase(id, case)" delete="deleteCase(id)">
+        <cases-dir case="case" locations="locations" drives="drives" edit="editCase(id, case)" delete="deleteCase(id, drive)">
         </cases-dir>
       </div>
     </div>
 
     <!-- Locations Window -->
-    <div class="locations" ng-if="showLocations">
+    <div class="locations" ng-if="tabFourActive">
 
       <!-- Locations Add Button and Search Box -->
       <button type="button" ng-click="toggleDialog()">Add Location</button>
@@ -159,7 +159,14 @@
       <form class="dialog" ng-if="dialog" ng-submit="addLocation(newLocation)">
         <h3>New Location</h3>
         <br>
-
+        <div class="errors">
+          <p ng-if="nameError">
+            Location name must be unique
+          </p>
+          <p ng-if="shortNameError">
+            Location short name must be unique
+          </p>
+        </div>
         <div class="edit">
           Name:
           <input type="text" placeholder="Location Name" ng-model="newLocation.name" required="true">

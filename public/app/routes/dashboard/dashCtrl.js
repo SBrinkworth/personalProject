@@ -2,16 +2,12 @@ angular.module("sanityWorksApp").controller("dashCtrl", function($scope, dashSer
 
   // Initializing Variables
   $scope.tabOneActive = true;
-  $scope.tabTwoActive = false;
-  $scope.tabThreeActive = false;
-  $scope.tabFourActive = false;
-  $scope.showDash = true;
   $scope.drives = drives;
   $scope.locations = locations;
   $scope.cases = cases;
   $scope.company = "5627f1255824b29105784cc8";
 
-  // New Object Functions and Variables
+  // New Object Variables
   $scope.newDrive = {
     name: "",
     size: "",
@@ -44,6 +40,8 @@ angular.module("sanityWorksApp").controller("dashCtrl", function($scope, dashSer
     },
     company: $scope.company
   };
+
+  // Functions for clearing and reseting after saves and edits
   $scope.getNone = function(type) {
     if (type === 'drive') {
       for (i = 0; i < $scope.drives.length; i++) {
@@ -120,17 +118,12 @@ angular.module("sanityWorksApp").controller("dashCtrl", function($scope, dashSer
     $scope.clearErrors();
   };
 
-
   // Hide and show windows and Filter object lists
   $scope.dashShow = function() {
     $scope.tabOneActive = true;
     $scope.tabTwoActive = false;
     $scope.tabThreeActive = false;
     $scope.tabFourActive = false;
-    $scope.showDash = true;
-    $scope.showDrives = false;
-    $scope.showCases = false;
-    $scope.showLocations = false;
     if ($scope.dialog) {
       $scope.toggleDialog();
     }
@@ -140,10 +133,6 @@ angular.module("sanityWorksApp").controller("dashCtrl", function($scope, dashSer
     $scope.tabTwoActive = true;
     $scope.tabThreeActive = false;
     $scope.tabFourActive = false;
-    $scope.showDash = false;
-    $scope.showDrives = true;
-    $scope.showCases = false;
-    $scope.showLocations = false;
     if ($scope.dialog) {
       $scope.toggleDialog();
     }
@@ -153,10 +142,6 @@ angular.module("sanityWorksApp").controller("dashCtrl", function($scope, dashSer
     $scope.tabTwoActive = false;
     $scope.tabThreeActive = true;
     $scope.tabFourActive = false;
-    $scope.showDash = false;
-    $scope.showDrives = false;
-    $scope.showCases = true;
-    $scope.showLocations = false;
     if ($scope.dialog) {
       $scope.toggleDialog();
     }
@@ -166,14 +151,12 @@ angular.module("sanityWorksApp").controller("dashCtrl", function($scope, dashSer
     $scope.tabTwoActive = false;
     $scope.tabThreeActive = false;
     $scope.tabFourActive = true;
-    $scope.showDash = false;
-    $scope.showDrives = false;
-    $scope.showCases = false;
-    $scope.showLocations = true;
     if ($scope.dialog) {
       $scope.toggleDialog();
     }
   };
+
+  // Object Filters for none objects
   $scope.filterDrives = function(item) {
     if (item.name === 'None') {
       return false;
@@ -196,44 +179,43 @@ angular.module("sanityWorksApp").controller("dashCtrl", function($scope, dashSer
   // CRUD Drive Functions
   $scope.addDrive = function(drive) {
     $scope.clearErrors();
-    var tOF = false;
-    var inUseCase = false;
-    var errors = false;
-    for (var i = 0; i < $scope.drives.length; i++) {
-      if (drive.name === $scope.drives[i].name) {
-        $scope.nameError = true;
-        errors = true;
-      }
-      if (drive.serial_number === $scope.drives[i].serial_number) {
-        $scope.serialNumberError = true;
-        errors = true;
-      }
-    }
-    if (errors) {
+
+    // Check for unique values
+    var nameError = dashService.checkDriveForNameMatch(drive.name, $scope.drives);
+    var snError = dashService.checkDriveForSNMatch(drive.serial_number, $scope.drives);
+    if (nameError || snError) {
+      $scope.nameError = nameError;
+      $scope.serialNumberError = snError;
       return;
     }
-    for (var i = 0; i < $scope.drives.length; i++) {
-      if ($scope.drives[i].case._id === drive.case) {
-        if (drive.case !== $scope.getNone('case')) {
-          inUseCase = confirm("There is another drive that is already using this case. Are you sure you want to use this case? The other drive will have no case.");
-        }
-      }
+
+    // Check for collections that already have desired Case
+    var driveSwap = dashService.checkForCaseMatch(drive.case, $scope.drives, $scope.getNone('case'));
+    if (!driveSwap.cancel && drive.swap) {
+      return;
     }
-    tOF = confirm("Are you sure you want to add this drive?");
-    if (tOF) {
-      if (inUseCase) {
-        dashService.editDrive($scope.drives[i]._id, {case: $scope.getNone('drive')}).then(function(response) {
+
+    // Confirm and Swap
+    if (confirm("Are you sure you want to add this drive?")) {
+      if (driveSwap.swap) {
+        dashService.editDrive(driveSwap.drive, {case: $scope.getNone('case')}).then(function(response) {
         });
-        dashService.editCase($scope.drives[i].case._id, {drive: drive.case}).then(function(response) {
+        dashService.addDrive(drive).then(function(response) {
+          dashService.editCase(drive.case, {drive: response._id}).then(function(response) {
+          });
+          $scope.refresh();
         });
       } else {
-        return;
+        dashService.addDrive(drive).then(function(response) {
+          dashService.editCase(drive.case, {drive: response._id}).then(function(response) {
+          });
+          $scope.refresh();
+        });
       }
 
-      dashService.addDrive(drive).then(function(response) {
-        $scope.refresh();
-      });
       $scope.toggleDialog();
+    } else {
+      return;
     }
   };
   $scope.editDrive = function(id, drive) {
@@ -241,31 +223,49 @@ angular.module("sanityWorksApp").controller("dashCtrl", function($scope, dashSer
       $scope.refresh();
     });
   };
-  $scope.deleteDrive = function(id) {
+  $scope.deleteDrive = function(id, _case) {
     dashService.deleteDrive(id).then(function(response) {
+      dashService.editCase(_case, {drive: $scope.getNone('drive')});
       $scope.refresh();
     });
   };
 
   // CRUD Case Functions
-  $scope.addCase = function(_case) {
+  $scope.addCase = function(newCase) {
     $scope.clearErrors();
-    var errors = false;
-    for (var i = 0; i < cases.length; i++) {
-      if (_case.name === cases[i].name) {
-        $scope.nameError = true;
-        errors = true;
-      }
-    }
-    if (errors) {
+
+    // Check for unique values
+    if (dashService.checkCaseForNameMatch(newCase.name, $scope.cases)) {
+      $scope.nameError = true;
       return;
     }
-    var tOF = confirm("Are you sure you want to add this case?");
-    if (tOF) {
-      dashService.addCase(_case).then(function(response) {
-        $scope.refresh();
-      });
+
+    // Check for collections that already have desired Case
+    var caseSwap = dashService.checkForDriveMatch(newCase.drive, $scope.cases, $scope.getNone('case'));
+    if (!caseSwap.swap) {
+      return;
+    }
+
+    // Confirm and Swap
+    if (confirm("Are you sure you want to add this case?")) {
+      if (caseSwap.swap) {
+        dashService.editCase(caseSwap.case, {drive: $scope.getNone('drive')}).then(function(response) {
+        });
+        dashService.addCase(newCase).then(function(response) {
+          dashService.editDrive(newCase.drive, {case: response._id}).then(function(response) {
+          });
+          $scope.refresh();
+        });
+      } else {
+        dashService.addCase(newCase).then(function(response) {
+          dashService.editDrive(_case.drive, {case: response._id}).then(function(response) {
+          });
+          $scope.refresh();
+        });
+      }
       $scope.toggleDialog();
+    } else {
+      return;
     }
   };
   $scope.editCase = function(id, _case) {
@@ -273,14 +273,23 @@ angular.module("sanityWorksApp").controller("dashCtrl", function($scope, dashSer
       $scope.refresh();
     });
   };
-  $scope.deleteCase = function(id) {
+  $scope.deleteCase = function(id, drive) {
     dashService.deleteCase(id).then(function(response) {
+      dashService.editDrive(drive, {case: $scope.getNone('case')});
       $scope.refresh();
     });
   };
 
   // CRUD Locations Functions
   $scope.addLocation = function(location) {
+    var nameError = dashService.checkLocationForNameMatch(location.name, $scope.locations);
+    var sNameError = dashService.checkLocationForSNameMatch(location.nameShort, $scope.locations);
+    if (nameError || sNameError) {
+      $scope.nameError = nameError;
+      $scope.shortNameError = sNameError;
+      return;
+    }
+
     dashService.addLocation(location).then(function(response) {
       $scope.refresh();
     });
@@ -293,9 +302,18 @@ angular.module("sanityWorksApp").controller("dashCtrl", function($scope, dashSer
   };
   $scope.deleteLocation = function(id) {
     dashService.deleteLocation(id).then(function(response) {
+      for (var i = 0; i < $scope.drives.length - 1; i++) {
+        if ($scope.drives[i].location._id === id) {
+          dashService.editDrive($scope.drives[i]._id, {location: $scope.getNone('location')});
+        }
+      }
+      for (var j = 0; j < $scope.cases.length; j++) {
+        if ($scope.cases[j].location._id === id) {
+          dashService.editCase($scope.cases[j]._id, {location: $scope.getNone('location')});
+        }
+      }
       $scope.refresh();
     });
   };
-
 
 });

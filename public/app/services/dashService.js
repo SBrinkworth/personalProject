@@ -1,70 +1,7 @@
 angular.module("sanityWorksApp").service("dashService", function($http) {
   var baseUrl = 'http://localhost:8080/';
 
-  this.drives = [{
-    name: 'Drive 1',
-    size: "2 TB",
-    serial_number: "123456789",
-    purchase_date: new Date('December 17, 1995 03:24:00'),
-    location: 12345,
-    case: 12345,
-    backing_up: true,
-    backup_type: 2,
-    last_backup_date: new Date(),
-    _id: 51447
-  }, {
-    name: 'Drive 2',
-    size: '3 TB',
-    serial_number: 0987654321,
-    purchase_date: new Date(),
-    location: 67890,
-    case: 67890,
-    backing_up: false,
-    backup_type: 1,
-    last_backup_date: new Date(),
-    _id: 47200
-  }];
-
-  this.locations = [{
-    name: 'Office',
-    nameShort: 'Off',
-    description: 'The office where the company stores the backup drives',
-    address: {
-      lineOne: '677 S 1850 E',
-      lineTwo: '',
-      city: 'Spanish Fork',
-      state: 'UT',
-      zip: '84660',
-      country: 'USA'
-    },
-    _id: "12345"
-  }, {
-    name: 'Home',
-    nameShort: 'Home',
-    description: 'My House',
-    address: {
-      lineOne: '677 S 1850 E',
-      lineTwo: '',
-      city: 'Spanish Fork',
-      state: 'UT',
-      zip: '84660',
-      country: 'USA'
-    },
-    _id: "67890"
-  }];
-
-  this.cases = [{
-    name: 'Case01',
-    drive: 51447,
-    location: 12345,
-    _id: 12345
-  }, {
-    name: 'Case02',
-    drive: 47200,
-    location: 67890,
-    _id: 67890
-  }];
-
+  // Drive Crud Functions
   this.getDrives = function() {
     return $http({
       method: 'GET',
@@ -73,7 +10,7 @@ angular.module("sanityWorksApp").service("dashService", function($http) {
       return response.data;
     });
   };
-  this.addDrive = function(drive) {
+  this.addDrive = function(drive, driveSwap) {
     return $http({
       method: 'POST',
       url: baseUrl + 'drives',
@@ -100,6 +37,7 @@ angular.module("sanityWorksApp").service("dashService", function($http) {
     });
   };
 
+  // Location Crud Functions
   this.getLocations = function() {
     return $http({
       method: 'GET',
@@ -135,6 +73,7 @@ angular.module("sanityWorksApp").service("dashService", function($http) {
     });
   };
 
+  // Case Crud Functions
   this.getCases = function() {
     return $http({
       method: 'GET',
@@ -170,5 +109,71 @@ angular.module("sanityWorksApp").service("dashService", function($http) {
     });
   };
 
+  // Check to see if drive swapping is needed
+  this.checkForCaseMatch = function(_case, drives, none) {
+    var response = {
+      swap: false
+    };
+    for (var i = 0; i < drives.length - 1; i++) {
+      if (_case === drives[i].case._id && _case !== none) {
+        response.drive = drives[i]._id;
+        response.swap = true;
+        response.cancel = confirm("The case you are trying to use is already in use. Are you sure you want to use this case? The other drive will be set to having no case.");
+        return response;
+      }
+    }
+    return response;
+  };
+  this.checkForDriveMatch = function(drive, cases, none) {
+    var response = {
+      swap: false
+    };
+    for (var i = 0; i < cases.length - 1; i++) {
+      if (drive === cases[i].drive._id && drive !== none) {
+        response.case = cases[i]._id;
+        response.swap = true;
+        response.cancel = confirm("The drive you are trying to use is already in use. Are you sure you want to use this drive? The other case will be set to having no drive.");
+        return response;
+      }
+    }
+    return response;
+  };
+
+  // Check for field matches
+  this.checkDriveForNameMatch = function(name, drives) {
+    for (var i = 0; i < drives.length; i++) {
+      if (name.toLowerCase() === drives[i].name.toLowerCase()) {
+        return true;
+      }
+    }
+  };
+  this.checkDriveForSNMatch = function(sn, drives) {
+    for (var i = 0; i < drives.length; i++) {
+      if (sn.toLowerCase() === drives[i].serial_number.toLowerCase()) {
+        return true;
+      }
+    }
+  };
+  this.checkCaseForNameMatch = function(name, cases) {
+    for (var i = 0; i < cases.length; i++) {
+      if (name.toLowerCase() === cases[i].name.toLowerCase()) {
+        return true;
+      }
+    }
+  };
+  this.checkLocationForNameMatch = function(name, locations) {
+    for (var i = 0; i < locations.length; i++) {
+      if (name.toLowerCase() === locations[i].name.toLowerCase()) {
+        return true;
+      }
+    }
+  };
+  this.checkLocationForSNameMatch = function(sname, locations) {
+    for (var i = 0; i < locations.length; i++) {
+      if (sname.toLowerCase() === locations[i].nameShort.toLowerCase()) {
+        return true;
+      }
+    }
+  };
 
 });
