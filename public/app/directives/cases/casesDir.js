@@ -5,11 +5,12 @@ angular.module('sanityWorksApp').directive('casesDir', function() {
     scope: {
       drives: '=',
       locations: '=',
+      cases: '=',
       case: '=',
       edit: '&',
       delete: '&'
     },
-    controller: function($scope) {
+    controller: function($scope, dashService) {
       $scope.tempLocations = (function() {
         var tempLocations = [];
         for (var i = 0; i < $scope.locations.length; i++) {
@@ -47,18 +48,24 @@ angular.module('sanityWorksApp').directive('casesDir', function() {
       };
 
       $scope.editCase = function() {
-        var tOF = confirm("Are you sure you want to edit this case?");
-        if (tOF) {
-          $scope.edit({
-            id: $scope.case._id,
-            case: $scope.tempCase
-          });
-          $scope.toggleInputs();
+        $scope.nameError = false;
+
+        if (dashService.checkCaseForNameMatch($scope.tempCase.name, $scope.cases) && $scope.tempCase.name !== $scope.case.name) {
+          $scope.nameError = true;
+          return;
         }
+
+        $scope.edit({
+          id: $scope.case._id,
+          case: $scope.tempCase,
+          oldDrive: $scope.case.drive._id
+        });
+        $scope.toggleInputs();
       };
 
       $scope.toggleInputs = function() {
         $scope.inputs = !$scope.inputs;
+        $scope.nameError = false;
         $scope.tempCase = {
           name: $scope.case.name,
           drive: $scope.case.drive._id,

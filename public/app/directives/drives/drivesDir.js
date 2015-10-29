@@ -4,27 +4,14 @@ angular.module('sanityWorksApp').directive('drivesDir', function() {
     templateUrl: 'app/directives/drives/drivesDirTmpl.html',
     scope: {
       drive: '=',
+      drives: '=',
       locations: '=',
       cases: '=',
       edit: '&',
       delete: '&'
     },
-    controller: function($scope) {
-      var Drive = function(name, size, serial_number, purchase_date, company, location, _case, backing_up, backup_type, last_backup_date) {
-        return {
-          name: name,
-          size: size,
-          serial_number: serial_number,
-          purchase_date: purchase_date,
-          company: company,
-          location: location,
-          case: _case,
-          backing_up: backing_up,
-          backup_type: backup_type,
-          last_backup_date: last_backup_date
-        };
-      };
-      $scope.tempDrive = new Drive($scope.drive.name,  $scope.drive.size, $scope.drive.serial_number, $scope.drive.purchase_date, $scope.drive.location, $scope.drive.case, $scope.drive.backup_type, $scope.drive.last_backup_date);
+    controller: function($scope, dashService) {
+      $scope.tempDrive = {};
       $scope.tempLocations = (function() {
         var tempLocations = [];
         for (var i = 0; i < $scope.locations.length; i++) {
@@ -57,24 +44,37 @@ angular.module('sanityWorksApp').directive('drivesDir', function() {
       };
 
       $scope.editDrive = function() {
-        var tOF = confirm("Are you sure you want to edit this drive?");
-        if (tOF) {
-          $scope.edit({
-            id: $scope.drive._id,
-            drive: $scope.tempDrive
-          });
-          $scope.toggleInputs();
+        $scope.nameError = false;
+        $scope.serialNumberError = false;
+
+        if ($scope.tempDrive.name !== $scope.drive.name) {
+          $scope.nameError = dashService.checkCaseForNameMatch($scope.tempDrive.name, $scope.drives);
         }
+        if ($scope.tempDrive.serial_number !== $scope.drive.serial_number) {
+          $scope.serialNumberError = dashService.checkDriveForSNMatch($scope.tempDrive.serial_number, $scope.drives);
+        }
+        if ($scope.nameError || $scope.serialNumberError) {
+          return;
+        }
+
+        $scope.edit({
+          id: $scope.drive._id,
+          drive: $scope.tempDrive,
+          oldCase: $scope.drive.case._id
+        });
+        $scope.toggleInputs();
       };
 
       $scope.toggleInputs = function() {
         $scope.inputs = !$scope.inputs;
+        $scope.nameError = false;
+        $scope.serialNumberError = false;
         $scope.tempDrive = {
           name: $scope.drive.name,
           size: $scope.drive.size,
           serial_number: $scope.drive.serial_number,
           purchase_date: new Date($scope.drive.purchase_date),
-          location: $scope.drive.location,
+          location: $scope.drive.location._id,
           case: $scope.drive.case._id,
           backup_type: $scope.drive.backup_type,
           last_backup_dateackup: new Date($scope.drive.last_backup_date)

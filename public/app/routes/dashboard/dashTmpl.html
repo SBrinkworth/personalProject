@@ -20,13 +20,52 @@
       Locations
     </p>
   </div>
-
+  <div class="border"></div>
   <!-- Dash Windows -->
   <div class="dash-content">
 
     <!-- Dashboard Window -->
     <div class="dash" ng-if="tabOneActive">
-      Dash
+      <button type="button" ng-click="swapBackupDrives()">Swap Drives</button>
+      <div class="nextDrive notification">
+        <h3>Next Backup Drive</h3>
+        <div>
+          Drive: {{nextBackupDrive.name}}
+        </div>
+        <div>
+          Type: {{nextBackupDrive.backup_type}}
+        </div>
+        <div>
+          Serial Number: {{nextBackupDrive.serial_number}}
+        </div>
+        <div>
+          Case: {{nextBackupDrive.case.name}}
+        </div>
+        <div>
+          Location: {{nextBackupDrive.location.name}}
+        </div>
+        <div>
+          Last Backup: {{nextBackupDrive.last_backup_date | date: 'shortDate'}}
+        </div>
+      </div>
+      <div class="currentBackup notification">
+        <h3>Drive Currently Backing Up</h3>
+        <div>
+          Drive: {{currentBackupDrive.name}}
+        </div>
+        <div>
+          Type: {{currentBackupDrive.backup_type}}
+        </div>
+        <div>
+          Serial Number: {{currentBackupDrive.serial_number}}
+        </div>
+        <div>
+          Case: {{currentBackupDrive.case.name}}
+        </div>
+        <div>
+          Location: {{currentBackupDrive.location.name}}
+        </div>
+      </div>
     </div>
 
     <!-- Drives Window -->
@@ -72,7 +111,7 @@
         </div>
 
         <div class="edit">Purchased:
-          <input type="date" ng-model="newDrive.purchase_date">
+          <input type="date" ng-model="newDrive.purchase_date" required="true">
         </div>
 
         <div class="edit">Current Location:
@@ -95,16 +134,16 @@
         </div>
 
         <div class="edit">Last Backup:
-          <input type="date" ng-model="newDrive.last_backup_date">
+          <input type="date" ng-model="newDrive.last_backup_date" required="true">
         </div>
         <br>
-        <button type="button" ng-click="toggleDialog()">Cancel</button>
         <button type="submit">Add</button>
+        <button type="button" ng-click="toggleDialog()">Cancel</button>
       </form>
 
       <!-- List of Drives -->
       <div ng-repeat="drive in drives | filter: driveSearch | filter: filterDrives">
-        <drives-dir drive="drive" locations="locations" cases="cases" edit="editDrive(id, drive)" delete="deleteDrive(id, _case)">
+        <drives-dir drive="drive" drives="drives" locations="locations" cases="cases" edit="editDrive(id, drive, oldCase)" delete="deleteDrive(id, _case)">
         </drives-dir>
       </div>
     </div>
@@ -137,13 +176,13 @@
           </select>
         </div>
         <br>
-        <button type="button" ng-click="toggleDialog()">Cancel</button>
         <button type="submit">Add</button>
+        <button type="button" ng-click="toggleDialog()">Cancel</button>
       </form>
 
       <!-- List of Cases -->
       <div ng-repeat="case in cases | filter: caseSearch | filter: filterCases">
-        <cases-dir case="case" locations="locations" drives="drives" edit="editCase(id, case)" delete="deleteCase(id, drive)">
+        <cases-dir case="case" cases="cases" locations="locations" drives="drives" edit="editCase(id, case, oldDrive)" delete="deleteCase(id, drive)">
         </cases-dir>
       </div>
     </div>
@@ -206,8 +245,8 @@
           <textarea ng-model="newLocation.description" placeholder="Description" required="true"></textarea>
         </div>
         <br>
-        <button type="button" ng-click="toggleDialog()">Cancel</button>
         <button type="submit">Add</button>
+        <button type="button" ng-click="toggleDialog()">Cancel</button>
       </form>
 
       <!-- List of Locations -->

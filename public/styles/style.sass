@@ -338,6 +338,21 @@ select
     min-height: calc(536px - 170px)
     font-size: 12px
 
+    .notification
+      width: 100%
+      border: 1px solid $form-border
+      min-height: calc(50% - 20px)
+      padding-bottom: 10px
+      margin-bottom: 10px
+
+      h3
+        padding: 10px
+        background-color: $form-background
+        border-bottom: 1px solid $form-border
+
+    .errors
+      color: red
+
     .search
       width: 80%
 
@@ -372,9 +387,6 @@ select
     .dialog
       border: 1px solid $form-border
       margin-bottom: 10px
-
-      .errors
-        color: red
 
       .edit
         display: inline-block

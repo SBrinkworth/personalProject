@@ -7,7 +7,14 @@ app.config(function($routeProvider) {
     controller: 'homeCtrl'
   }).when('/login', {
     templateUrl: 'app/routes/login/loginTmpl.html',
-    controller: 'loginCtrl'
+    controller: 'loginCtrl',
+    resolve: {
+      users: function(mainService) {
+        return mainService.getUsers().then(function(response) {
+          return response;
+        });
+      }
+    }
   }).when('/signup', {
     templateUrl: 'app/routes/signup/signupTmpl.html',
     controller: 'signupCtrl'

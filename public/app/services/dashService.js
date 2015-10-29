@@ -110,12 +110,12 @@ angular.module("sanityWorksApp").service("dashService", function($http) {
   };
 
   // Check to see if drive swapping is needed
-  this.checkForCaseMatch = function(_case, drives, none) {
+  this.checkForCaseMatch = function(_case, drives, none, drive) {
     var response = {
       swap: false
     };
     for (var i = 0; i < drives.length - 1; i++) {
-      if (_case === drives[i].case._id && _case !== none) {
+      if (_case === drives[i].case._id && _case !== none && drive !== drives[i]._id) {
         response.drive = drives[i]._id;
         response.swap = true;
         response.cancel = confirm("The case you are trying to use is already in use. Are you sure you want to use this case? The other drive will be set to having no case.");
@@ -124,12 +124,12 @@ angular.module("sanityWorksApp").service("dashService", function($http) {
     }
     return response;
   };
-  this.checkForDriveMatch = function(drive, cases, none) {
+  this.checkForDriveMatch = function(drive, cases, none, _case) {
     var response = {
       swap: false
     };
     for (var i = 0; i < cases.length - 1; i++) {
-      if (drive === cases[i].drive._id && drive !== none) {
+      if (drive === cases[i].drive._id && drive !== none && _case !== cases[i]._id) {
         response.case = cases[i]._id;
         response.swap = true;
         response.cancel = confirm("The drive you are trying to use is already in use. Are you sure you want to use this drive? The other case will be set to having no drive.");
@@ -174,6 +174,22 @@ angular.module("sanityWorksApp").service("dashService", function($http) {
         return true;
       }
     }
+  };
+  this.getNextBackup = function(drives, none, current) {
+    var oldest = {
+      drive: {},
+      date: new Date()
+    };
+    var backup_type = "weekly";
+    var lastOfMonth = new Date( oldest.date.getFullYear(), oldest.date.getMonth()+1, 0 );
+
+    for (var i = 0; i < drives.length; i++) {
+      if (new Date(drives[i].last_backup_date) < oldest.date && drives[i]._id !== none && drives[i]._id !== current) {
+        oldest.drive = drives[i];
+        oldest.date = new Date(drives[i].last_backup_date);
+      }
+    }
+    return oldest.drive;
   };
 
 });

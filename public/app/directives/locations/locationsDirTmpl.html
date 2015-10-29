@@ -5,52 +5,52 @@
     <div class="display" style="flex: 3">address: {{location.address.lineOne}} {{location.address.lineTwo}}, {{location.address.city}} {{location.address.state}} {{location.address.zip}} {{location.address.country}}</div>
   </div>
 
-  <div class="hidden-info" ng-if="hide">
+  <form class="hidden-info" ng-if="hide" ng-submit="editLocation()">
     <div class="my-flex">
       <div class="display" ng-if="!inputs">Description: {{location.description}}</div>
     </div>
 
     <div class="edit" ng-if="inputs">
       Name:
-      <input type="text" placeholder="Location Name" ng-model="tempLocation.name">
+      <input type="text" placeholder="Location Name" ng-model="tempLocation.name" required="true">
     </div>
     <div class="edit" ng-if="inputs">
       Short:
-      <input type="text" placeholder="Location Name Short" ng-model="tempLocation.nameShort">
+      <input type="text" placeholder="Location Name Short" ng-model="tempLocation.nameShort" required="true">
     </div>
     <br>
     <div ng-if="inputs">
       Address:
     </div>
     <br>
-    <div class="edit" ng-if="inputs">Line 1:
-      <input type="text" placeholder="Address Line 1" ng-model="tempLocation.address.lineOne">
+    <div class="edit" ng-if="inputs">* Line 1:
+      <input type="text" placeholder="Address Line 1" ng-model="tempLocation.address.lineOne" required="true">
     </div>
     <div class="edit" ng-if="inputs">Line 2:
       <input type="text" placeholder="Address Line 2" ng-model="tempLocation.address.lineTwo">
     </div>
-    <div class="edit" ng-if="inputs">City:
-      <input type="text" placeholder="City" ng-model="tempLocation.address.city">
+    <div class="edit" ng-if="inputs">* City:
+      <input type="text" placeholder="City" ng-model="tempLocation.address.city" required="true">
     </div>
-    <div class="edit" ng-if="inputs">State:
-      <input type="text" placeholder="State" ng-model="tempLocation.address.state">
+    <div class="edit" ng-if="inputs">* State:
+      <input type="text" placeholder="State" ng-model="tempLocation.address.state" required="true">
     </div>
-    <div class="edit" ng-if="inputs">Zip:
-      <input type="text" placeholder="Zip" ng-model="tempLocation.address.zip">
+    <div class="edit" ng-if="inputs">* Zip:
+      <input type="text" placeholder="Zip" ng-model="tempLocation.address.zip" required="true">
     </div>
-    <div class="edit" ng-if="inputs">Country:
-      <input type="text" placeholder="Country" ng-model="tempLocation.address.country">
+    <div class="edit" ng-if="inputs">* Country:
+      <input type="text" placeholder="Country" ng-model="tempLocation.address.country" required="true">
     </div>
     <br>
     <div class="edit" ng-if="inputs">
       Description:
-      <textarea ng-model="tempLocation.description" placeholder="Description"></textarea>
+      <textarea ng-model="tempLocation.description" placeholder="Description"></textarea required="true">
     </div>
 
     <br>
     <button type="button" ng-click="toggleInputs()" ng-if="!inputs">Edit</button>
-    <button type="button" ng-click="editLocation()" ng-if="inputs">Save</button>
+    <button type="submit" ng-if="inputs">Save</button>
     <button type="button" ng-click="toggleInputs()" ng-if="inputs">cancel</button>
     <button type="button" ng-click="deleteLocation()" ng-if="!inputs">Delete</button>
-  </div>
+  </form>
 </div>

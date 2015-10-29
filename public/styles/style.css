@@ -468,6 +468,18 @@ select {
     color: black;
     min-height: calc(536px - 170px);
     font-size: 12px; }
+    .dashboard .dash-content .notification {
+      width: 100%;
+      border: 1px solid #CACACA;
+      min-height: calc(50% - 20px);
+      padding-bottom: 10px;
+      margin-bottom: 10px; }
+      .dashboard .dash-content .notification h3 {
+        padding: 10px;
+        background-color: #F6F6F6;
+        border-bottom: 1px solid #CACACA; }
+    .dashboard .dash-content .errors {
+      color: red; }
     .dashboard .dash-content .search {
       width: 80%; }
     .dashboard .dash-content .items {
@@ -494,8 +506,6 @@ select {
     .dashboard .dash-content .dialog {
       border: 1px solid #CACACA;
       margin-bottom: 10px; }
-      .dashboard .dash-content .dialog .errors {
-        color: red; }
       .dashboard .dash-content .dialog .edit {
         display: inline-block; }
       .dashboard .dash-content .dialog input {

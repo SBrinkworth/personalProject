@@ -7,16 +7,25 @@
     <div class="display">Location: {{drive.location.nameShort}}</div>
   </div>
 
-  <div class="hidden-info" ng-if="hide">
+  <form class="hidden-info" ng-submit="editDrive()" ng-if="hide">
     <div class="my-flex">
       <div class="display" ng-if="!inputs">Size: {{drive.size}}</div>
       <div class="display" ng-if="!inputs">Purchased: {{drive.purchase_date | date: 'shortDate'}}</div>
-      <div class="display" ng-if="!inputs">Current Location: {{drive.location.name}}</div>
+      <div class="display" ng-if="!inputs" style="flex: 2">Current Location: {{drive.location.name}}</div>
       <div class="display" ng-if="!inputs">Last Backup: {{drive.last_backup_date | date: 'shortDate'}}</div>
     </div>
 
+    <div class="errors">
+      <p ng-if="nameError && inputs">
+        Drive name must be unique
+      </p>
+      <p ng-if="serialNumberError && inputs">
+        Drive serial number must be unique
+      </p>
+    </div>
+
     <div class="edit" ng-if="inputs">Name:
-      <input type="text" placeholder="Drive Name" ng-model="tempDrive.name">
+      <input type="text" placeholder="Drive Name" ng-model="tempDrive.name" required="true">
     </div>
 
     <div class="edit" ng-if="inputs">Size:
@@ -34,14 +43,14 @@
     </div>
 
     <div class="edit" ng-if="inputs">SN:
-      <input type="text" placeholder="Serial Number" ng-model="tempDrive.serial_number">
+      <input type="text" placeholder="Serial Number" ng-model="tempDrive.serial_number" required="true">
     </div>
 
     <div class="edit" ng-if="inputs">Purchased:
-      <input type="date" ng-model="tempDrive.purchase_date">
+      <input type="date" ng-model="tempDrive.purchase_date" required="true">
     </div>
 
-    <div class="edit" ng-if="inputs">Current Location:
+    <div class="edit" ng-if="inputs">Location:
       <select ng-model="tempDrive.location" ng-options="location._id as location.name for location in tempLocations"></select>
     </div>
 
@@ -58,13 +67,13 @@
     </div>
 
     <div class="edit" ng-if="inputs">Last Backup:
-      <input type="date" ng-model="tempDrive.last_backup_dateackup">
+      <input type="date" ng-model="tempDrive.last_backup_dateackup" required="true">
     </div>
 
     <br>
     <button type="button" ng-click="toggleInputs()" ng-if="!inputs">Edit</button>
-    <button type="button" ng-click="editDrive()" ng-if="inputs">Save</button>
+    <button type="submit" ng-if="inputs">Save</button>
     <button type="button" ng-click="toggleInputs()" ng-if="inputs">cancel</button>
     <button type="button" ng-click="deleteDrive()" ng-if="!inputs">Delete</button>
-  </div>
+  </form>
 </div>

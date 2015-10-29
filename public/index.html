@@ -18,9 +18,9 @@
     <nav role="navigation">
       <ul id="js-navigation-menu" class="navigation-menu show">
         <li class="nav-link"><a href="#/home">Home</a></li>
-        <li class="nav-link" ng-if="logedin"><a href="#/dashboard">Dashboard</a></li>
+        <li class="nav-link" ng-if="!logedin"><a href="#/dashboard">Dashboard</a></li>
         <li class="nav-link" ng-if="logedin"><a href="#/settings">Settings</a></li>
-        <li class="nav-link" ng-if="!logedin"><a href="#/login">Login</a></li>
+        <li class="nav-link" ng-if="logedin"><a href="#/login">Login</a></li>
         <li class="nav-link" ng-if="logedin"><a href="#/login">Logout</a></li>
       </ul>
     </nav>
