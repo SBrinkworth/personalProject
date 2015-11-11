@@ -5,121 +5,64 @@ var bodyParser = require('body-parser');
 var cors = require('cors');
 var mongoose = require('mongoose');
 var session = require('express-session');
-var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
-var flash = require('connect-flash');
-var morgan = require('morgan');
-var cookieParser = require('cookie-parser');
-var port = process.env.PORT || 8080;
+var config = require("./config");
 var CasesController = require('./controllers/CasesController');
 var CompaniesController = require('./controllers/CompaniesController');
 var DrivesController = require('./controllers/DrivesController');
 var LocationsController = require('./controllers/LocationsController');
 var UsersController = require('./controllers/UsersController');
+var passport = require("./services/passport");
+var isAuthed = function(req, res, next) {
+  if (!req.isAuthenticated()) return res.sendStatus(401);
+  return next();
+};
+
+
 
 var app = express();
+
+
 
 // Middleware
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 app.use(cors());
-// app.use(session({
-//   secret: 'SanITyWorks.com Web Application Secret Sentance',
-//   resave: false,
-//   saveUninitialized: true
-// }));
-// app.use(passport.initialize());
-// app.use(passport.session());
-// app.use(flash());
+
+app.use(session({
+  secret: 'SanITyWorks.com Web Application Secret Sentance',
+  resave: true,
+  saveUninitialized: true
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+
 
 // Authentication
-// passport.use('local-signup', new LocalStrategy({
-//     // by default, local strategy uses username and password, we will override with email
-//     usernameField: 'email',
-//     passwordField: 'password',
-//     passReqToCallback: true // allows us to pass in the req from our route (lets us check if a user is logged in or not)
-//   },
-//   function(req, email, password, done) {
-//     if (email) email = email.toLowerCase(); // Use lower-case e-mails to avoid case-sensitive e-mail matching
-//     // asynchronous
-//     process.nextTick(function() {
-//       // if the user is not already logged in:
-//       if (!req.user) {
-//         User.findOne({
-//           'local.email': email
-//         }, function(err, user) {
-//           // if there are any errors, return the error
-//           if (err) return done(err);
-//
-//           // check to see if theres already a user with that email
-//           if (user) {
-//             return done(null, false);
-//           } else {
-//
-//             // create the user
-//             var newUser = new User();
-//             newUser.local.email = email;
-//             newUser.local.password = newUser.generateHash(password);
-//             newUser.name = req.body.name;
-//             newUser.avatar = req.body.avatar;
-//             newUser.userType = req.body.userType;
-//           }
-//         });
-//       }
-//     });
-//   }));
-// passport.use('local-login', new LocalStrategy({
-//     usernameField: 'email',
-//     passwordField: "password"
-//   },
-//   function(email, password, done) {
-//     User.findOne({
-//       email: email
-//     }, function(err, user) {
-//       if (err) {
-//         return done(err);
-//       }
-//       if (!user) {
-//         return done(null, false);
-//       }
-//       if (!user.verifyPassword(password)) {
-//         return done(null, false);
-//       }
-//       return done(null, user);
-//     });
-//   }
-// ));
-// passport.serializeUser(function(user, cb) {
-//   cb(null, user.id);
-// });
-// passport.deserializeUser(function(id, cb) {
-//   db.users.findById(id, function(err, user) {
-//     if (err) {
-//       return cb(err);
-//     }
-//     cb(null, user);
-//   });
-// });
+app.post('/user', UserCtrl.register);
+app.get('/user', isAuthed, UserCtrl.me);
+app.put('/user', isAuthed, UserCtrl.update);
 
-// Endpoints -- VIEW -- CRUD
-// Authentication Endpoints
-// app.post('/user/auth/signup', passport.authenticate('local-signup'), function(req, res) {
-//   res.status(200).json(req.user).end();
-// });
-// app.post('/user/auth/login', passport.authenticate('local'), function(req, res) {
-//   res.status(200).json(req.user).end();
-// });
+app.post('/login', passport.authenticate('local', {
+  successRedirect: '/user'
+}));
+app.get('/logout', function(req, res) {
+  req.logout();
+  return res.send('logged out');
+});
 
-// Endpoints
+
+
+// Regular Endpoints
 app.get('/drives', DrivesController.read);
 app.post('/drives', DrivesController.create);
 app.put('/drives/:id', DrivesController.update);
 app.delete('/drives/:id', DrivesController.delete);
 
-app.get('/users', UsersController.read);
-app.post('/users', UsersController.create);
-app.put('/users/:id', UsersController.update);
-app.delete('/users/:id', UsersController.delete);
+// app.get('/users', UsersController.read);
+// app.post('/users', UsersController.create);
+// app.put('/users/:id', UsersController.update);
+// app.delete('/users/:id', UsersController.delete);
 
 app.get('/cases', CasesController.read);
 app.post('/cases', CasesController.create);
@@ -136,13 +79,16 @@ app.post('/companies', CompaniesController.create);
 app.put('/companies/:id', CompaniesController.update);
 app.delete('/companies/:id', CompaniesController.delete);
 
+
+
 // Listen
-var mongoURI = 'mongodb://localhost:27017/sanityWorks';
+var mongoURI = config.MONGO_URI;
+var port = config.PORT;
 
 mongoose.set('debug', true);
 mongoose.connect(mongoURI);
 mongoose.connection.once('open', function() {
-  console.log("connected to mongoDB at: ", mongoURI);
+  console.log("connected to Mongo DB at: ", mongoURI);
 });
 
 app.listen(port, function() {
