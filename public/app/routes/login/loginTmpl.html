@@ -1,11 +1,11 @@
-<form class="loginBox" ng-submit="login()">
+<form class="loginBox" ng-submit="login(user)">
   <h3>Login</h3>
   <h4>Not a user?
     <a href="#/signup">Sign Up</a>
   </h4>
   Email
-  <input type="text" model="user.email" placeholder="Email" required/>
+  <input type="text" ng-model="user.email" placeholder="Email" required/>
   Last Name
-  <input type="password" model="user.password" placeholder="Password" required/>
+  <input type="password" ng-model="user.password" placeholder="Password" required/>
   <button type="submit" name="login">Login</button>
 </form>

@@ -43,6 +43,7 @@ app.use(passport.session());
 app.post('/user', UsersController.register);
 app.get('/user', isAuthed, UsersController.me);
 app.put('/user', isAuthed, UsersController.update);
+// app.delete('/users/:id', UsersController.delete);
 
 app.post('/login', passport.authenticate('local', {
   successRedirect: '/user'
@@ -59,11 +60,6 @@ app.get('/drives', DrivesController.read);
 app.post('/drives', DrivesController.create);
 app.put('/drives/:id', DrivesController.update);
 app.delete('/drives/:id', DrivesController.delete);
-
-// app.get('/users', UsersController.read);
-// app.post('/users', UsersController.create);
-// app.put('/users/:id', UsersController.update);
-// app.delete('/users/:id', UsersController.delete);
 
 app.get('/cases', CasesController.read);
 app.post('/cases', CasesController.create);

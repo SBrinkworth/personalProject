@@ -1,9 +1,8 @@
-angular.module("sanityWorksApp").controller("loginCtrl", function($scope, mainService, $location, users) {
-  $scope.user = {};
-  $scope.users = users;
-  $scope.login = function() {
-    mainService.login($scope.user).then(function(response) {
-      $location.path('/dashboard');
+angular.module("sanityWorksApp").controller("loginCtrl", function($scope, $location, authService) {
+  $scope.login = function(user) {
+    console.log(user);
+    authService.login(user).then(function(response) {
+      console.log(response);
     });
   };
 });

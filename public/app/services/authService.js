@@ -4,7 +4,7 @@ angular.module("sanityWorksApp").service("authService", function($http, constant
       method: 'POST',
       url: constants.baseURL + 'user',
       data: user
-    }).this(function(response) {
+    }).then(function(response) {
       return response.data;
     });
   };
@@ -12,9 +12,9 @@ angular.module("sanityWorksApp").service("authService", function($http, constant
   this.login = function(user) {
     return $http({
       method: 'POST',
-      url: constants.baseURL + 'login',
+      url: '/login',
       data: user
-    }).this(function(response) {
+    }).then(function(response) {
       return response.data;
     });
   };
@@ -23,7 +23,7 @@ angular.module("sanityWorksApp").service("authService", function($http, constant
     return $http({
       method: 'GET',
       url: constants.baseURL + 'logout'
-    }).this(function(response) {
+    }).then(function(response) {
       return response.data;
     });
   };
@@ -32,7 +32,7 @@ angular.module("sanityWorksApp").service("authService", function($http, constant
     return $http({
       method: 'GET',
       url: constants.baseURL + 'user'
-    }).this(function(response) {
+    }).then(function(response) {
       return response.data;
     });
   };
@@ -42,7 +42,7 @@ angular.module("sanityWorksApp").service("authService", function($http, constant
       method: 'PUT',
       url: constants.baseURL + 'user',
       data: user
-    }).this(function(response) {
+    }).then(function(response) {
       return response.data;
     });
   };

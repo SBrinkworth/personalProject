@@ -8,23 +8,19 @@ angular.module("sanityWorksApp", ['ngRoute'])
 .config(["$routeProvider", function($routeProvider) {
 
   $routeProvider.when('/home', {
-    templateUrl: 'app/routes/home/homeTmpl.html',
+    templateUrl: './app/routes/home/homeTmpl.html',
     controller: 'homeCtrl'
   }).when('/login', {
-    templateUrl: 'app/routes/login/loginTmpl.html',
+    templateUrl: './app/routes/login/loginTmpl.html',
     controller: 'loginCtrl',
     resolve: {
-      users: ["mainService", function(mainService) {
-        return mainService.getUsers().then(function(response) {
-          return response;
-        });
-      }]
+
     }
   }).when('/signup', {
-    templateUrl: 'app/routes/signup/signupTmpl.html',
+    templateUrl: './app/routes/signup/signupTmpl.html',
     controller: 'signupCtrl'
   }).when('/dashboard', {
-    templateUrl: 'app/routes/dashboard/dashTmpl.html',
+    templateUrl: './app/routes/dashboard/dashTmpl.html',
     controller: 'dashCtrl',
     resolve: {
       drives: ["dashService", function(dashService) {
@@ -44,7 +40,7 @@ angular.module("sanityWorksApp", ['ngRoute'])
       }]
     }
   }).when('/settings', {
-    templateUrl: 'app/routes/settings/settingsTmpl.html',
+    templateUrl: './app/routes/settings/settingsTmpl.html',
     controller: 'settingsCtrl'
   }).otherwise({
     redirectTo: '/login'
@@ -61,7 +57,7 @@ angular.module("sanityWorksApp").service("authService", ["$http", "constants", f
       method: 'POST',
       url: constants.baseURL + 'user',
       data: user
-    }).this(function(response) {
+    }).then(function(response) {
       return response.data;
     });
   };
@@ -69,9 +65,9 @@ angular.module("sanityWorksApp").service("authService", ["$http", "constants", f
   this.login = function(user) {
     return $http({
       method: 'POST',
-      url: constants.baseURL + 'login',
+      url: '/login',
       data: user
-    }).this(function(response) {
+    }).then(function(response) {
       return response.data;
     });
   };
@@ -80,7 +76,7 @@ angular.module("sanityWorksApp").service("authService", ["$http", "constants", f
     return $http({
       method: 'GET',
       url: constants.baseURL + 'logout'
-    }).this(function(response) {
+    }).then(function(response) {
       return response.data;
     });
   };
@@ -89,7 +85,7 @@ angular.module("sanityWorksApp").service("authService", ["$http", "constants", f
     return $http({
       method: 'GET',
       url: constants.baseURL + 'user'
-    }).this(function(response) {
+    }).then(function(response) {
       return response.data;
     });
   };
@@ -99,7 +95,7 @@ angular.module("sanityWorksApp").service("authService", ["$http", "constants", f
       method: 'PUT',
       url: constants.baseURL + 'user',
       data: user
-    }).this(function(response) {
+    }).then(function(response) {
       return response.data;
     });
   };
@@ -919,12 +915,11 @@ angular.module("sanityWorksApp").controller("homeCtrl", ["$scope", function($sco
 
 }]);
 
-angular.module("sanityWorksApp").controller("loginCtrl", ["$scope", "mainService", "$location", "users", function($scope, mainService, $location, users) {
-  $scope.user = {};
-  $scope.users = users;
-  $scope.login = function() {
-    mainService.login($scope.user).then(function(response) {
-      $location.path('/dashboard');
+angular.module("sanityWorksApp").controller("loginCtrl", ["$scope", "$location", "authService", function($scope, $location, authService) {
+  $scope.login = function(user) {
+    console.log(user);
+    authService.login(user).then(function(response) {
+      console.log(response);
     });
   };
 }]);
@@ -933,13 +928,12 @@ angular.module("sanityWorksApp").controller("settingsCtrl", ["$scope", function(
 
 }]);
 
-angular.module("sanityWorksApp").controller("signupCtrl", ["$scope", "mainService", "$location", function($scope, mainService, $location) {
-  $scope.user = {};
-  $scope.user.company = "5627f1255824b29105784cc8";
-  $scope.signup = function() {
-    if ($scope.user.password === $scope.password_repeat) {
-      mainService.signup($scope.user).then(function(response) {
-        $location.path('/login');
+angular.module("sanityWorksApp").controller("signupCtrl", ["$scope", "authService", "$location", function($scope, authService, $location) {
+
+  $scope.signup = function(user) {
+    if (user.password === $scope.password_repeat) {
+      authService.register(user).then(function(response) {
+        console.log(response);
       });
     }
     else {
