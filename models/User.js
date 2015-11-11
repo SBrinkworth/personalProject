@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var bcrypt = require('bcryptjs');
 
-var User = new mongoose.Schema({
+var schema = new mongoose.Schema({
   name: {
     first: {type: String},
     last: {type: String}
@@ -14,7 +14,7 @@ var User = new mongoose.Schema({
   password: { type: String }
 });
 
-User.pre('save', function(next) {
+schema.pre('save', function(next) {
 	var user = this;
 	if (!user.isModified('password'))	return next();
   var salt = bcrypt.genSaltSync(10);
@@ -23,7 +23,7 @@ User.pre('save', function(next) {
   return next(null, user);
 });
 
-User.methods.verifyPassword = function(reqBodyPassword) {
+schema.methods.verifyPassword = function(reqBodyPassword) {
   var user = this;
   return bcrypt.compareSync(reqBodyPassword, user.password);
 };

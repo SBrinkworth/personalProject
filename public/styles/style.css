@@ -111,6 +111,7 @@ ol {
   list-style-type: none;
   margin: 0;
   padding: 0; }
+
 dl {
   margin-bottom: 0.75em; }
   dl dt {
@@ -291,7 +292,7 @@ header.navigation {
       right: -0.4em;
       bottom: auto;
       left: auto;
-      content: "▾";
+      content: '\25BE';
       color: rgba(255, 255, 255, 0.7); }
   header.navigation li.more {
     overflow: visible;
@@ -305,11 +306,12 @@ header.navigation {
         header.navigation li.more > a {
           margin-right: 1em; } }
       header.navigation li.more > a:after {
-        content: "›";
+        content: '›';
         font-size: 1.2em;
         position: absolute;
         right: 0.5em; }
-    header.navigation li.more:focus > .submenu, header.navigation li.more:hover > .submenu {
+    header.navigation li.more:focus > .submenu,
+    header.navigation li.more:hover > .submenu {
       display: block; }
     @media screen and (min-width: 53.75em) {
       header.navigation li.more {
@@ -588,5 +590,3 @@ select {
     margin: auto;
     max-width: 35em;
     text-align: center; }
-
-/*# sourceMappingURL=style.css.map */

@@ -1,6 +1,11 @@
-var app = angular.module("sanityWorksApp", ['ngRoute']);
+angular.module("sanityWorksApp", ['ngRoute'])
 
-app.config(function($routeProvider) {
+.constant("constants",
+{
+  "baseURL": "http://localhost:9852/"
+})
+
+.config(function($routeProvider) {
 
   $routeProvider.when('/home', {
     templateUrl: 'app/routes/home/homeTmpl.html',

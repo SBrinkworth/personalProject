@@ -1,11 +1,10 @@
-angular.module("sanityWorksApp").service("dashService", function($http) {
-  var baseUrl = 'http://localhost:8080/';
+angular.module("sanityWorksApp").service("dashService", function($http, constants) {
 
   // Drive Crud Functions
   this.getDrives = function() {
     return $http({
       method: 'GET',
-      url: baseUrl + 'drives'
+      url: constants.baseURL + 'drives'
     }).then(function(response) {
       return response.data;
     });
@@ -13,7 +12,7 @@ angular.module("sanityWorksApp").service("dashService", function($http) {
   this.addDrive = function(drive, driveSwap) {
     return $http({
       method: 'POST',
-      url: baseUrl + 'drives',
+      url: constants.baseURL + 'drives',
       data: drive
     }).then(function(response) {
       return response.data;
@@ -22,7 +21,7 @@ angular.module("sanityWorksApp").service("dashService", function($http) {
   this.editDrive = function(id, drive) {
     return $http({
       method: 'PUT',
-      url: baseUrl + 'drives/' + id,
+      url: constants.baseURL + 'drives/' + id,
       data: drive
     }).then(function(response) {
       return response.data;
@@ -31,7 +30,7 @@ angular.module("sanityWorksApp").service("dashService", function($http) {
   this.deleteDrive = function(id) {
     return $http({
       method: 'DELETE',
-      url: baseUrl + 'drives/' + id
+      url: constants.baseURL + 'drives/' + id
     }).then(function(response) {
       return response.data;
     });
@@ -41,7 +40,7 @@ angular.module("sanityWorksApp").service("dashService", function($http) {
   this.getLocations = function() {
     return $http({
       method: 'GET',
-      url: baseUrl + 'locations'
+      url: constants.baseURL + 'locations'
     }).then(function(response) {
       return response.data;
     });
@@ -49,7 +48,7 @@ angular.module("sanityWorksApp").service("dashService", function($http) {
   this.addLocation = function(location) {
     return $http({
       method: 'POST',
-      url: baseUrl + 'locations',
+      url: constants.baseURL + 'locations',
       data: location
     }).then(function(response) {
       return response.data;
@@ -58,7 +57,7 @@ angular.module("sanityWorksApp").service("dashService", function($http) {
   this.editLocation = function(id, location) {
     return $http({
       method: 'PUT',
-      url: baseUrl + 'locations/' + id,
+      url: constants.baseURL + 'locations/' + id,
       data: location
     }).then(function(response) {
       return response.data;
@@ -67,7 +66,7 @@ angular.module("sanityWorksApp").service("dashService", function($http) {
   this.deleteLocation = function(id) {
     return $http({
       method: 'DELETE',
-      url: baseUrl + 'locations/' + id
+      url: constants.baseURL + 'locations/' + id
     }).then(function(response) {
       return response.data;
     });
@@ -77,7 +76,7 @@ angular.module("sanityWorksApp").service("dashService", function($http) {
   this.getCases = function() {
     return $http({
       method: 'GET',
-      url: baseUrl + 'cases'
+      url: constants.baseURL + 'cases'
     }).then(function(response) {
       return response.data;
     });
@@ -85,7 +84,7 @@ angular.module("sanityWorksApp").service("dashService", function($http) {
   this.addCase = function(_case) {
     return $http({
       method: 'POST',
-      url: baseUrl + 'cases',
+      url: constants.baseURL + 'cases',
       data: _case
     }).then(function(response) {
       return response.data;
@@ -94,7 +93,7 @@ angular.module("sanityWorksApp").service("dashService", function($http) {
   this.editCase = function(id, _case) {
     return $http({
       method: 'PUT',
-      url: baseUrl + 'cases/' + id,
+      url: constants.baseURL + 'cases/' + id,
       data: _case
     }).then(function(response) {
       return response.data;
@@ -103,7 +102,7 @@ angular.module("sanityWorksApp").service("dashService", function($http) {
   this.deleteCase = function(id) {
     return $http({
       method: 'DELETE',
-      url: baseUrl + 'cases/' + id
+      url: constants.baseURL + 'cases/' + id
     }).then(function(response) {
       return response.data;
     });

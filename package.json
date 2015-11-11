@@ -4,14 +4,22 @@
   "description": "My DevMountain Personal Project",
   "main": "server.js",
   "dependencies": {
-    "cors": "^2.7.1",
     "bcryptjs": "^2.3.0",
-    "express": "^4.13.3",
     "body-parser": "^1.14.1",
+    "cors": "^2.7.1",
+    "express": "^4.13.3",
     "express-session": "^1.12.1",
+    "gulp": "^3.9.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-ng-annotate": "^1.1.0",
+    "gulp-plumber": "^1.0.1",
+    "gulp-sass": "^2.1.0",
+    "gulp-uglify": "^1.4.2",
+    "gulp-watch": "^4.3.5",
     "mongoose": "^4.2.5",
     "passport": "^0.3.2",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "path": "^0.12.7"
   },
   "devDependencies": {},
   "scripts": {

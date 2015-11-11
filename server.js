@@ -1,27 +1,28 @@
 'usestrict';
 
+// Requires
 var express = require('express');
 var bodyParser = require('body-parser');
 var cors = require('cors');
 var mongoose = require('mongoose');
 var session = require('express-session');
 var config = require("./config");
+
+// Controllers
 var CasesController = require('./controllers/CasesController');
 var CompaniesController = require('./controllers/CompaniesController');
 var DrivesController = require('./controllers/DrivesController');
 var LocationsController = require('./controllers/LocationsController');
 var UsersController = require('./controllers/UsersController');
-var passport = require("./services/passport");
+
+// Auth Requires
+var passport = require("./services/pasport");
 var isAuthed = function(req, res, next) {
   if (!req.isAuthenticated()) return res.sendStatus(401);
   return next();
 };
 
-
-
 var app = express();
-
-
 
 // Middleware
 app.use(express.static(__dirname + '/public'));
@@ -39,9 +40,9 @@ app.use(passport.session());
 
 
 // Authentication
-app.post('/user', UserCtrl.register);
-app.get('/user', isAuthed, UserCtrl.me);
-app.put('/user', isAuthed, UserCtrl.update);
+app.post('/user', UsersController.register);
+app.get('/user', isAuthed, UsersController.me);
+app.put('/user', isAuthed, UsersController.update);
 
 app.post('/login', passport.authenticate('local', {
   successRedirect: '/user'
