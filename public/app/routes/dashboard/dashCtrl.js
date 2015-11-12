@@ -1,11 +1,19 @@
-angular.module("sanityWorksApp").controller("dashCtrl", function($scope, dashService, drives, locations, cases, $location) {
+angular.module("sanityWorksApp").controller("dashCtrl", function($scope, dashService, drives, locations, cases, $location, authService) {
+
+  authService.getCurrentUser().then(function(response) {
+    $scope.user = response;
+    $scope.company = $scope.user.company;
+  }, function(error) {
+    if (error) {
+      $location.path('/login');
+    }
+  });
 
   // Initializing Variables
   $scope.tabOneActive = true;
   $scope.drives = drives;
   $scope.locations = locations;
   $scope.cases = cases;
-  $scope.company = "5627f1255824b29105784cc8";
   $scope.currentBackupDrive = '';
   $scope.nextBackupDrive = '';
 

@@ -7,42 +7,66 @@ angular.module("sanityWorksApp", ['ngRoute'])
 
 .config(["$routeProvider", function($routeProvider) {
 
-  $routeProvider.when('/home', {
-    templateUrl: './app/routes/home/homeTmpl.html',
-    controller: 'homeCtrl'
-  }).when('/login', {
+  $routeProvider
+  // .when('/home', {
+  //   templateUrl: './app/routes/home/homeTmpl.html',
+  //   controller: 'homeCtrl'
+  // })
+  .when('/login', {
     templateUrl: './app/routes/login/loginTmpl.html',
     controller: 'loginCtrl',
     resolve: {
 
     }
-  }).when('/signup', {
+  })
+  .when('/signup', {
     templateUrl: './app/routes/signup/signupTmpl.html',
     controller: 'signupCtrl'
-  }).when('/dashboard', {
+  })
+  .when('/dashboard', {
     templateUrl: './app/routes/dashboard/dashTmpl.html',
     controller: 'dashCtrl',
     resolve: {
-      drives: ["dashService", function(dashService) {
-        return dashService.getDrives().then(function(response) {
+      drives: ["authService", "dashService", function(authService, dashService) {
+        var company;
+        authService.getCurrentUser().then(function(response) {
+          company = response.company;
+        }, function(error) {
+
+        });
+        return dashService.getDrives(company).then(function(response) {
           return response;
         });
       }],
-      locations: ["dashService", function(dashService) {
-        return dashService.getLocations().then(function(response) {
+      locations: ["authService", "dashService", function(authService, dashService) {
+        var company;
+        authService.getCurrentUser().then(function(response) {
+          company = response.company;
+        }, function(error) {
+
+        });
+        return dashService.getLocations(company).then(function(response) {
           return response;
         });
       }],
-      cases: ["dashService", function(dashService) {
-        return dashService.getCases().then(function(response) {
+      cases: ["authService", "dashService", function(authService, dashService) {
+        var company;
+        authService.getCurrentUser().then(function(response) {
+          company = response.company;
+        }, function(error) {
+
+        });
+        return dashService.getCases(company).then(function(response) {
           return response;
         });
       }]
     }
-  }).when('/settings', {
-    templateUrl: './app/routes/settings/settingsTmpl.html',
-    controller: 'settingsCtrl'
-  }).otherwise({
+  })
+  // .when('/settings', {
+  //   templateUrl: './app/routes/settings/settingsTmpl.html',
+  //   controller: 'settingsCtrl'
+  // })
+  .otherwise({
     redirectTo: '/login'
   });
 }]);
@@ -51,7 +75,7 @@ angular.module("sanityWorksApp").controller("mainCtrl", ["$scope", function($sco
 
 }]);
 
-angular.module("sanityWorksApp").service("authService", ["$http", "constants", function($http, constants) {
+angular.module("sanityWorksApp").service("authService", ["$http", "constants", "$location", function($http, constants, $location) {
   this.register = function(user) {
     return $http({
       method: 'POST',
@@ -86,14 +110,15 @@ angular.module("sanityWorksApp").service("authService", ["$http", "constants", f
       method: 'GET',
       url: constants.baseURL + 'user'
     }).then(function(response) {
+      console.log(response);
       return response.data;
     });
   };
 
-  this.updateUser = function(user) {
+  this.updateUser = function(id, user) {
     return $http({
       method: 'PUT',
-      url: constants.baseURL + 'user',
+      url: constants.baseURL + 'user/' + id,
       data: user
     }).then(function(response) {
       return response.data;
@@ -101,13 +126,25 @@ angular.module("sanityWorksApp").service("authService", ["$http", "constants", f
   };
 }]);
 
+angular.module("sanityWorksApp").service("companyService", ["$http", "constants", function($http, constants) {
+  this.createCompany = function() {
+    return $http({
+      method: 'POST',
+      url: constants.baseURL + 'companies',
+      data: {}
+    }).then(function(response) {
+        return response.data;
+    });
+  };
+}]);
+
 angular.module("sanityWorksApp").service("dashService", ["$http", "constants", function($http, constants) {
 
   // Drive Crud Functions
-  this.getDrives = function() {
+  this.getDrives = function(id) {
     return $http({
       method: 'GET',
-      url: constants.baseURL + 'drives'
+      url: constants.baseURL + 'drives/' + id
     }).then(function(response) {
       return response.data;
     });
@@ -140,10 +177,10 @@ angular.module("sanityWorksApp").service("dashService", ["$http", "constants", f
   };
 
   // Location Crud Functions
-  this.getLocations = function() {
+  this.getLocations = function(id) {
     return $http({
       method: 'GET',
-      url: constants.baseURL + 'locations'
+      url: constants.baseURL + 'locations/' + id
     }).then(function(response) {
       return response.data;
     });
@@ -176,10 +213,10 @@ angular.module("sanityWorksApp").service("dashService", ["$http", "constants", f
   };
 
   // Case Crud Functions
-  this.getCases = function() {
+  this.getCases = function(id) {
     return $http({
       method: 'GET',
-      url: constants.baseURL + 'cases'
+      url: constants.baseURL + 'cases/' + id
     }).then(function(response) {
       return response.data;
     });
@@ -464,6 +501,31 @@ angular.module('sanityWorksApp').directive('drivesDir', function() {
   };
 });
 
+angular.module('sanityWorksApp').directive('navDir', function() {
+  return {
+    restrict: 'E',
+    templateUrl: 'app/directives/header/headerTmpl.html',
+    controller: ["$scope", "authService", "$location", function($scope, authService, $location) {
+      $scope.logedin = false;
+      authService.getCurrentUser().then(function(response) {
+        $scope.user = response;
+        if ($scope.user) {
+          $scope.logedin = true;
+        }
+      }, function(error) {
+        if (error) {
+          
+        }
+      }
+    );
+
+      $scope.logout = function() {
+        authService.logout();
+      };
+    }]
+  };
+});
+
 angular.module('sanityWorksApp').directive('locationsDir', function() {
   return {
     restrict: 'E',
@@ -516,14 +578,22 @@ angular.module('sanityWorksApp').directive('locationsDir', function() {
   };
 });
 
-angular.module("sanityWorksApp").controller("dashCtrl", ["$scope", "dashService", "drives", "locations", "cases", "$location", function($scope, dashService, drives, locations, cases, $location) {
+angular.module("sanityWorksApp").controller("dashCtrl", ["$scope", "dashService", "drives", "locations", "cases", "$location", "authService", function($scope, dashService, drives, locations, cases, $location, authService) {
+
+  authService.getCurrentUser().then(function(response) {
+    $scope.user = response;
+    $scope.company = $scope.user.company;
+  }, function(error) {
+    if (error) {
+      $location.path('/login');
+    }
+  });
 
   // Initializing Variables
   $scope.tabOneActive = true;
   $scope.drives = drives;
   $scope.locations = locations;
   $scope.cases = cases;
-  $scope.company = "5627f1255824b29105784cc8";
   $scope.currentBackupDrive = '';
   $scope.nextBackupDrive = '';
 
@@ -917,9 +987,8 @@ angular.module("sanityWorksApp").controller("homeCtrl", ["$scope", function($sco
 
 angular.module("sanityWorksApp").controller("loginCtrl", ["$scope", "$location", "authService", function($scope, $location, authService) {
   $scope.login = function(user) {
-    console.log(user);
     authService.login(user).then(function(response) {
-      console.log(response);
+      $location.path('/dashboard');
     });
   };
 }]);
@@ -928,12 +997,20 @@ angular.module("sanityWorksApp").controller("settingsCtrl", ["$scope", function(
 
 }]);
 
-angular.module("sanityWorksApp").controller("signupCtrl", ["$scope", "authService", "$location", function($scope, authService, $location) {
+angular.module("sanityWorksApp").controller("signupCtrl", ["$scope", "authService", "$location", "companyService", function($scope, authService, $location, companyService) {
 
   $scope.signup = function(user) {
     if (user.password === $scope.password_repeat) {
       authService.register(user).then(function(response) {
-        console.log(response);
+        $scope.user = response;
+        companyService.createCompany().then(function(response) {
+          console.log(response._id);
+          var company = {company: response._id};
+          authService.updateUser($scope.user._id, company).then(function(response) {
+            console.log(response);
+            $location.path('/login');
+          });
+        });
       });
     }
     else {

@@ -9,25 +9,7 @@
   <meta name="viewport" content="initial-scale=1" />
 </head>
 
-<header class="navigation" role="banner">
-  <div class="navigation-wrapper">
-    <a href="#/home" class="logo">
-      San<span>IT</span>yWorks.com
-    </a>
-    <a href="javascript:void(0)" class="navigation-menu-button" id="js-mobile-menu">MENU</a>
-    <nav role="navigation">
-      <ul id="js-navigation-menu" class="navigation-menu show">
-        <li class="nav-link"><a href="#/home">Home</a></li>
-        <li class="nav-link" ng-if="!logedin"><a href="#/dashboard">Dashboard</a></li>
-        <li class="nav-link" ng-if="logedin"><a href="#/settings">Settings</a></li>
-        <li class="nav-link" ng-if="logedin"><a href="#/login">Login</a></li>
-        <li class="nav-link" ng-if="logedin"><a href="#/login">Logout</a></li>
-      </ul>
-    </nav>
-</header>
-
 <body layout="column" ng-controller="mainCtrl" ng-cloak>
-  </div>
 
   <div ng-view></div>
 

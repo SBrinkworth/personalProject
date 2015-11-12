@@ -42,7 +42,7 @@ app.use(passport.session());
 // Authentication
 app.post('/user', UsersController.register);
 app.get('/user', isAuthed, UsersController.me);
-app.put('/user', isAuthed, UsersController.update);
+app.put('/user/:id', UsersController.update);
 // app.delete('/users/:id', UsersController.delete);
 
 app.post('/login', passport.authenticate('local', {
@@ -56,17 +56,17 @@ app.get('/logout', function(req, res) {
 
 
 // Regular Endpoints
-app.get('/drives', DrivesController.read);
+app.get('/drives/:id', DrivesController.read);
 app.post('/drives', DrivesController.create);
 app.put('/drives/:id', DrivesController.update);
 app.delete('/drives/:id', DrivesController.delete);
 
-app.get('/cases', CasesController.read);
+app.get('/cases/:id', CasesController.read);
 app.post('/cases', CasesController.create);
 app.put('/cases/:id', CasesController.update);
 app.delete('/cases/:id', CasesController.delete);
 
-app.get('/locations', LocationsController.read);
+app.get('/locations/:id', LocationsController.read);
 app.post('/locations', LocationsController.create);
 app.put('/locations/:id', LocationsController.update);
 app.delete('/locations/:id', LocationsController.delete);

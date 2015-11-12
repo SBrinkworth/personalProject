@@ -2,7 +2,7 @@ var Drive = require('../models/Drive');
 
 module.exports = {
   read: function(req, res) {
-    Drive.find()
+    Drive.find({company: req.params.id})
       .populate('case')
       .populate('location')
       .sort('name')

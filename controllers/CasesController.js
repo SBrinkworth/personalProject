@@ -2,7 +2,7 @@ var Case = require('../models/Case');
 
 module.exports = {
   read: function(req, res) {
-    Case.find()
+    Case.find({company: req.params.id})
       .populate('drive')
       .populate('location')
       .sort('name')

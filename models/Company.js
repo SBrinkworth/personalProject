@@ -1,17 +1,17 @@
 var mongoose = require('mongoose');
 
 var schema = new mongoose.Schema({
-  name: {type: String, required: true},
-  e_mail: {type: String, required: true},
-  e_mail_alt: {type: String},
-  phone: {type: Number, required: true},
+  name: {type: String},
+  email: {type: String},
+  email_alt: {type: String},
+  phone: {type: Number},
   address: {
-    lineOne: {type: String, required: true},
+    lineOne: {type: String},
     lineTwo: {type: String},
-    city: {type: String, required: true},
-    state: {type: String, required: true},
-    zip: {type: String, required: true},
-    country: {type: String, required: true}
+    city: {type: String},
+    state: {type: String},
+    zip: {type: String},
+    country: {type: String}
   }
 });
 

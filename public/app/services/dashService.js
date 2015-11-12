@@ -1,10 +1,10 @@
 angular.module("sanityWorksApp").service("dashService", function($http, constants) {
 
   // Drive Crud Functions
-  this.getDrives = function() {
+  this.getDrives = function(id) {
     return $http({
       method: 'GET',
-      url: constants.baseURL + 'drives'
+      url: constants.baseURL + 'drives/' + id
     }).then(function(response) {
       return response.data;
     });
@@ -37,10 +37,10 @@ angular.module("sanityWorksApp").service("dashService", function($http, constant
   };
 
   // Location Crud Functions
-  this.getLocations = function() {
+  this.getLocations = function(id) {
     return $http({
       method: 'GET',
-      url: constants.baseURL + 'locations'
+      url: constants.baseURL + 'locations/' + id
     }).then(function(response) {
       return response.data;
     });
@@ -73,10 +73,10 @@ angular.module("sanityWorksApp").service("dashService", function($http, constant
   };
 
   // Case Crud Functions
-  this.getCases = function() {
+  this.getCases = function(id) {
     return $http({
       method: 'GET',
-      url: constants.baseURL + 'cases'
+      url: constants.baseURL + 'cases/' + id
     }).then(function(response) {
       return response.data;
     });

@@ -1,4 +1,4 @@
-angular.module("sanityWorksApp").service("authService", function($http, constants) {
+angular.module("sanityWorksApp").service("authService", function($http, constants, $location) {
   this.register = function(user) {
     return $http({
       method: 'POST',
@@ -33,14 +33,15 @@ angular.module("sanityWorksApp").service("authService", function($http, constant
       method: 'GET',
       url: constants.baseURL + 'user'
     }).then(function(response) {
+      console.log(response);
       return response.data;
     });
   };
 
-  this.updateUser = function(user) {
+  this.updateUser = function(id, user) {
     return $http({
       method: 'PUT',
-      url: constants.baseURL + 'user',
+      url: constants.baseURL + 'user/' + id,
       data: user
     }).then(function(response) {
       return response.data;

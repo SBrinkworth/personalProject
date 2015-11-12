@@ -2,7 +2,7 @@ var _Location = require('../models/Location');
 
 module.exports = {
   read: function(req, res) {
-    _Location.find().sort('name')
+    _Location.find({company: req.params.id}).sort('name')
       .exec(function(err, result) {
         if (err) {
           res.send(err);

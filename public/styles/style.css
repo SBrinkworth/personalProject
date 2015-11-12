@@ -182,36 +182,36 @@ picture {
   margin: 0;
   max-width: 100%; }
 
-header.navigation {
+.navigation {
   background-color: #333;
   border-bottom: 1px solid #1a1a1a;
   min-height: 60px;
   width: 100%;
   z-index: 999; }
-  header.navigation .navigation-wrapper {
+  .navigation .navigation-wrapper {
     max-width: 68em;
     margin-left: auto;
     margin-right: auto;
     position: relative;
     z-index: 9999; }
-    header.navigation .navigation-wrapper::after {
+    .navigation .navigation-wrapper::after {
       clear: both;
       content: "";
       display: table; }
-    header.navigation .navigation-wrapper::after {
+    .navigation .navigation-wrapper::after {
       clear: both;
       content: "";
       display: table; }
-  header.navigation .logo {
+  .navigation .logo {
     float: left;
     max-height: 60px;
     padding-left: 1em;
     padding-right: 2em;
     padding-top: 1em;
     color: blue; }
-    header.navigation .logo span {
+    .navigation .logo span {
       color: red; }
-  header.navigation .navigation-menu-button {
+  .navigation .navigation-menu-button {
     color: rgba(255, 255, 255, 0.7);
     display: block;
     float: right;
@@ -221,18 +221,18 @@ header.navigation {
     text-decoration: none;
     text-transform: uppercase; }
     @media screen and (min-width: 53.75em) {
-      header.navigation .navigation-menu-button {
+      .navigation .navigation-menu-button {
         display: none; } }
-    header.navigation .navigation-menu-button:focus, header.navigation .navigation-menu-button:hover {
+    .navigation .navigation-menu-button:focus, .navigation .navigation-menu-button:hover {
       color: white; }
-  header.navigation nav {
+  .navigation nav {
     float: none;
     min-height: 60px;
     z-index: 9999999; }
     @media screen and (min-width: 53.75em) {
-      header.navigation nav {
+      .navigation nav {
         float: left; } }
-  header.navigation ul.navigation-menu {
+  .navigation ul.navigation-menu {
     clear: both;
     display: none;
     margin: 0 auto;
@@ -240,14 +240,14 @@ header.navigation {
     padding: 0;
     width: 100%;
     z-index: 9999; }
-    header.navigation ul.navigation-menu.show {
+    .navigation ul.navigation-menu.show {
       display: block; }
     @media screen and (min-width: 53.75em) {
-      header.navigation ul.navigation-menu {
+      .navigation ul.navigation-menu {
         display: inline;
         margin: 0;
         padding: 0; } }
-  header.navigation ul li.nav-link {
+  .navigation ul li.nav-link {
     background: #333;
     display: block;
     line-height: 60px;
@@ -257,36 +257,36 @@ header.navigation {
     width: 100%;
     z-index: 9999; }
     @media screen and (min-width: 53.75em) {
-      header.navigation ul li.nav-link {
+      .navigation ul li.nav-link {
         background: transparent;
         display: inline;
         line-height: 60px;
         text-decoration: none;
         width: auto; } }
-    header.navigation ul li.nav-link a {
+    .navigation ul li.nav-link a {
       color: rgba(255, 255, 255, 0.7);
       display: inline-block;
       text-decoration: none; }
       @media screen and (min-width: 53.75em) {
-        header.navigation ul li.nav-link a {
+        .navigation ul li.nav-link a {
           padding-right: 1em; } }
-      header.navigation ul li.nav-link a:focus, header.navigation ul li.nav-link a:hover {
+      .navigation ul li.nav-link a:focus, .navigation ul li.nav-link a:hover {
         color: white; }
-  header.navigation .active-nav-item a {
+  .navigation .active-nav-item a {
     border-bottom: 1px solid rgba(255, 255, 255, 0.5);
     padding-bottom: 3px; }
-  header.navigation li.more.nav-link {
+  .navigation li.more.nav-link {
     padding-right: 0; }
     @media screen and (min-width: 53.75em) {
-      header.navigation li.more.nav-link {
+      .navigation li.more.nav-link {
         padding-right: 1em; } }
-    header.navigation li.more.nav-link > ul > li:first-child a {
+    .navigation li.more.nav-link > ul > li:first-child a {
       padding-top: 1em; }
-    header.navigation li.more.nav-link a {
+    .navigation li.more.nav-link a {
       margin-right: 1em; }
-    header.navigation li.more.nav-link > a {
+    .navigation li.more.nav-link > a {
       padding-right: 0.6em; }
-    header.navigation li.more.nav-link > a:after {
+    .navigation li.more.nav-link > a:after {
       position: absolute;
       top: auto;
       right: -0.4em;
@@ -294,72 +294,72 @@ header.navigation {
       left: auto;
       content: '\25BE';
       color: rgba(255, 255, 255, 0.7); }
-  header.navigation li.more {
+  .navigation li.more {
     overflow: visible;
     padding-right: 0; }
-    header.navigation li.more a {
+    .navigation li.more a {
       padding-right: 0.8em; }
-    header.navigation li.more > a {
+    .navigation li.more > a {
       padding-right: 1.6em;
       position: relative; }
       @media screen and (min-width: 53.75em) {
-        header.navigation li.more > a {
+        .navigation li.more > a {
           margin-right: 1em; } }
-      header.navigation li.more > a:after {
+      .navigation li.more > a:after {
         content: '›';
         font-size: 1.2em;
         position: absolute;
         right: 0.5em; }
-    header.navigation li.more:focus > .submenu,
-    header.navigation li.more:hover > .submenu {
+    .navigation li.more:focus > .submenu,
+    .navigation li.more:hover > .submenu {
       display: block; }
     @media screen and (min-width: 53.75em) {
-      header.navigation li.more {
+      .navigation li.more {
         padding-right: 0.8em;
         position: relative; } }
-  header.navigation ul.submenu {
+  .navigation ul.submenu {
     display: none;
     padding-left: 0; }
     @media screen and (min-width: 53.75em) {
-      header.navigation ul.submenu {
+      .navigation ul.submenu {
         left: -1em;
         position: absolute;
         top: 1.5em; } }
     @media screen and (min-width: 53.75em) {
-      header.navigation ul.submenu .submenu {
+      .navigation ul.submenu .submenu {
         left: 11.8em;
         top: 0; } }
-    header.navigation ul.submenu li {
+    .navigation ul.submenu li {
       display: block;
       padding-right: 0; }
       @media screen and (min-width: 53.75em) {
-        header.navigation ul.submenu li {
+        .navigation ul.submenu li {
           line-height: 46.15385px; }
-          header.navigation ul.submenu li:first-child > a {
+          .navigation ul.submenu li:first-child > a {
             border-top-left-radius: 3px;
             border-top-right-radius: 3px; }
-          header.navigation ul.submenu li:last-child > a {
+          .navigation ul.submenu li:last-child > a {
             border-bottom-left-radius: 3px;
             border-bottom-right-radius: 3px;
             padding-bottom: 0.7em; } }
-      header.navigation ul.submenu li a {
+      .navigation ul.submenu li a {
         background-color: #2b2b2b;
         display: inline-block;
         text-align: right;
         width: 100%; }
         @media screen and (min-width: 53.75em) {
-          header.navigation ul.submenu li a {
+          .navigation ul.submenu li a {
             background-color: #333;
             padding-left: 1em;
             text-align: left;
             width: 12em; } }
-  header.navigation .navigation-tools {
+  .navigation .navigation-tools {
     background: #505050;
     clear: both;
     display: block;
     height: 60px; }
     @media screen and (min-width: 53.75em) {
-      header.navigation .navigation-tools {
+      .navigation .navigation-tools {
         background: transparent;
         clear: none;
         float: right; } }
