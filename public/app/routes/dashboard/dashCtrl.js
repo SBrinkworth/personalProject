@@ -118,13 +118,13 @@ angular.module("sanityWorksApp").controller("dashCtrl", function($scope, dashSer
     $scope.nextBackupDrive = dashService.getNextBackup($scope.drives, $scope.getNone('drive'), $scope.currentBackupDrive._id);
   };
   $scope.refresh = function() {
-    dashService.getDrives().then(function(response) {
+    dashService.getDrives($scope.user.company).then(function(response) {
       $scope.drives = response;
     });
-    dashService.getCases().then(function(response) {
+    dashService.getCases($scope.user.company).then(function(response) {
       $scope.cases = response;
     });
-    dashService.getLocations().then(function(response) {
+    dashService.getLocations($scope.user.company).then(function(response) {
       $scope.locations = response;
     });
     $scope.getCurrentBackup();
